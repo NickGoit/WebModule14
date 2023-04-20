@@ -31,6 +31,13 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def startup():
+    """
+The startup function is called when the application starts up.
+It's a good place to initialize things that are used by the app, such as databases or caches.
+
+:return: A future, so we need to await it
+:doc-author: Trelent
+"""
     r = await redis.Redis(host=settings.redis_host, port=settings.redis_port, db=0, encoding="utf-8",
                           decode_responses=True)
     await FastAPILimiter.init(r)
@@ -43,6 +50,14 @@ async def root():
 
 @app.get("/api/healthchecker")
 def healthchecker(db: Session = Depends(get_db)):
+    """
+The healthchecker function is a simple function that checks if the database is configured correctly.
+It does this by executing a SQL query and checking if it returns any results. If it doesn't, then we know something's wrong.
+
+:param db: Session: Pass the database session to the function
+:return: A dictionary with a message
+:doc-author: Trelent
+"""
     try:
         result = db.execute(text("SELECT 1")).fetchone()
         if result is None:
