@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     redis_port: int = 4339
     cloudinary_name: str = 'temp'
     cloudinary_api_key: int = 4523469
-    cloudinary_api_secret: str = 'sectret api'
+    cloudinary_api_secret: str = 'secret api'
 
     class Config:
         env_file = ".env"

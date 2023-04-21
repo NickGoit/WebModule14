@@ -10,12 +10,14 @@ Welcome to Rest API's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+
 REST API main
 =================
 .. automodule:: main
   :members:
   :undoc-members:
   :show-inheritance:
+
 
 REST API database DB
 =======================
@@ -24,12 +26,14 @@ REST API database DB
   :undoc-members:
   :show-inheritance:
 
+
 REST API repository Contacts
 ===============================
 .. automodule:: src.repository.contacts
   :members:
   :undoc-members:
   :show-inheritance:
+
 
 REST API repository Users
 ============================
@@ -38,12 +42,14 @@ REST API repository Users
   :undoc-members:
   :show-inheritance:
 
+
 REST API routes Auth
 =======================
 .. automodule:: src.routes.auth
   :members:
   :undoc-members:
   :show-inheritance:
+
 
 REST API routes Contacts
 ==========================
@@ -52,6 +58,7 @@ REST API routes Contacts
   :undoc-members:
   :show-inheritance:
 
+
 REST API routes Users
 ==========================
 .. automodule:: src.routes.users
@@ -59,12 +66,14 @@ REST API routes Users
   :undoc-members:
   :show-inheritance:
 
+
 REST API services Auth
 ==========================
 .. automodule:: src.services.auth
   :members:
   :undoc-members:
   :show-inheritance:
+
 
 REST API services Email
 ==========================
