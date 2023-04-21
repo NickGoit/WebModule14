@@ -98,7 +98,7 @@ async def confirmed_email(token: str, db: Session = Depends(get_db)):
 The confirmed_email function is used to confirm a user's email address.
     It takes the token from the URL and uses it to get the user's email address.
     The function then checks if there is a user with that email in our database, and if not, returns an error message.
-    If there is a user with that email in our database, we check whether their account has already been confirmed or not.
+    If there is a user with that email in our database,we check whether their account has already been confirmed or not.
         If it has been confirmed already, we return another error message saying so; otherwise we call repository_users'
         confirmed_email function which sets the 'confirmed' field of that particular record to
 
