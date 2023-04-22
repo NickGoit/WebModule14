@@ -35,6 +35,47 @@ class TestNotes(unittest.IsolatedAsyncioTestCase):
         result = await get_contacts(skip=0, limit=10, first_name='', last_name='', email='', db=self.session)
         self.assertEqual(result, contacts)
 
+    async def test_get_contacts_by_first_name(self):
+        contacts = [self.contact_test, Contact(), Contact()]
+        self.session.query().filter().all.return_value = contacts
+        result = await get_contacts(skip=0, limit=10, first_name=self.contact_test.first_name,
+                                    last_name='', email='', db=self.session)
+        self.assertEqual(result, contacts)
+
+    async def test_get_contacts_by_first_name_and_email(self):
+        contacts = [self.contact_test, Contact(), Contact()]
+        self.session.query().select_from().filter().all.return_value = contacts
+        result = await get_contacts(skip=0, limit=10, first_name=self.contact_test.first_name,
+                                    last_name='', email=self.contact_test.email, db=self.session)
+        self.assertEqual(result, contacts)
+
+    async def test_get_contacts_by_last_name(self):
+        contacts = [self.contact_test, Contact(), Contact()]
+        self.session.query().filter().all.return_value = contacts
+        result = await get_contacts(skip=0, limit=10, first_name='',
+                                    last_name=self.contact_test.last_name, email='', db=self.session)
+        self.assertEqual(result, contacts)
+
+    async def test_get_contacts_by_last_name_and_email(self):
+        contacts = [self.contact_test, Contact(), Contact()]
+        self.session.query().select_from().filter().all.return_value = contacts
+        result = await get_contacts(skip=0, limit=10, first_name='', last_name=self.contact_test.last_name,
+                                    email=self.contact_test.email, db=self.session)
+        self.assertEqual(result, contacts)
+
+    async def test_get_contacts_by_email(self):
+        contacts = [self.contact_test, Contact(), Contact()]
+        self.session.query().filter().all.return_value = contacts
+        result = await get_contacts(skip=0, limit=10, first_name='',
+                                    last_name='', email=self.contact_test.email, db=self.session)
+        self.assertEqual(result, contacts)
+
+    async def test_get_contact_by_id(self):
+        contacts = [self.contact_test, Contact(), Contact()]
+        self.session.query().filter().first.return_value = contacts
+        result = await get_contact_by_id(contact_id=self.contact_test.id, db=self.session)
+        self.assertEqual(result, contacts)
+
 
 if __name__ == '__main__':
     unittest.main()
