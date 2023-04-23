@@ -106,8 +106,28 @@ class TestNotes(unittest.IsolatedAsyncioTestCase):
         result = await remove_contact(contact_id=self.contact_test.id, db=self.session, user=self.user)
         self.assertIsNone(result)
 
+    async def test_update_contact(self):
+        contact = self.contact_test
+        body = ContactModel(
+            first_name='Jonny',
+            last_name=self.contact_test.last_name,
+            email=self.contact_test.email,
+            phone=self.contact_test.email,
+            date_of_birth=self.contact_test.date_of_birth)
+        self.session.query().filter().first.return_value = contact
+        result = await update_contact(contact_id=self.contact_test.id, body=body, db=self.session, user=self.user)
+        self.assertEqual(result, contact)
 
-
+    async def test_update_contact_not_found(self):
+        body = ContactModel(
+            first_name='Jonny',
+            last_name=self.contact_test.last_name,
+            email=self.contact_test.email,
+            phone=self.contact_test.email,
+            date_of_birth=self.contact_test.date_of_birth)
+        self.session.query().filter().first.return_value = None
+        result = await update_contact(contact_id=self.contact_test.id, body=body, db=self.session, user=self.user)
+        self.assertIsNone(result)
 
 if __name__ == '__main__':
     unittest.main()
