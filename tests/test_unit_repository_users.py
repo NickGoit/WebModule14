@@ -20,7 +20,11 @@ class TestUsers(unittest.IsolatedAsyncioTestCase):
 
     def setUp(self):
         self.session = MagicMock(spec=Session)
-        self.user = User(id=1)
+        self.user = User(
+            id=1,
+            username='User1',
+            email='user1@gmail.com',
+            password ='qwerty')
         self.contact_test = Contact(
             id=1,
             first_name='Buster',
@@ -31,10 +35,25 @@ class TestUsers(unittest.IsolatedAsyncioTestCase):
         )
 
     async def test_get_user_by_email(self):
-        contacts = [self.contact_test, Contact(), Contact()]
-        self.session.query().offset().limit().all.return_value = contacts
-        result = await get_user_by_email(email=self.contact_test, db=self.session)
-        self.assertEqual(result, contacts)
+        contact = self.contact_test
+        self.session.query().filter().first.return_value = contact
+        result = await get_user_by_email(email=self.user.email, db=self.session)
+        self.assertEqual(result, contact)
 
-        # get_user_by_email(email: str, db: Session) -> User | None:
-        # db.query(User).filter(User.email == email).first()
+    async def test_create_user(self):
+        body = UserModel(
+                        username=self.user.username,
+                        email=self.user.email,
+                        password=self.user.password,
+            )
+        result = await create_user(body=body, db=self.session)
+
+        self.assertEqual(result.username, body.username)
+        self.assertEqual(result.email, body.email)
+        self.assertEqual(result.password, body.password)
+        self.assertTrue(hasattr(result, "id"))
+
+
+
+if __name__ == '__main__':
+    unittest.main()
