@@ -18,7 +18,7 @@ from src.repository.contacts import (
 )
 
 
-class TestNotes(unittest.IsolatedAsyncioTestCase):
+class TestContacts(unittest.IsolatedAsyncioTestCase):
 
     def setUp(self):
         self.session = MagicMock(spec=Session)
