@@ -129,5 +129,27 @@ class TestNotes(unittest.IsolatedAsyncioTestCase):
         result = await update_contact(contact_id=self.contact_test.id, body=body, db=self.session, user=self.user)
         self.assertIsNone(result)
 
+    async def test_verify_email(self):
+        contacts = self.contact_test
+        self.session.query().filter().first.return_value = contacts
+        result = await verify_email_phone(email=self.contact_test.email, phone='', db=self.session)
+        self.assertEqual(result, contacts)
+
+    async def test_verify_phone(self):
+        contacts = self.contact_test
+        self.session.query().filter().first.return_value = contacts
+        result = await verify_email_phone(email='', phone=self.contact_test.phone, db=self.session)
+        self.assertEqual(result, contacts)
+
+    async def get_contact_birthday(self):
+        contacts = [self.contact_test,
+                    Contact(date_of_birth=datetime.date(year=1986, month=4, day=25)),
+                    Contact(date_of_birth=datetime.date(year=1987, month=4, day=27))]
+        self.session.query().offset().limit().all.return_value = contacts
+
+        result = await get_contact_birthday(skip=0, limit=10, db=self.session)
+        self.assertListEqual(result, contacts)
+
+
 if __name__ == '__main__':
     unittest.main()
