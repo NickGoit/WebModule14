@@ -95,6 +95,18 @@ class TestNotes(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(result.date_of_birth, body.date_of_birth)
         self.assertTrue(hasattr(result, "id"))
 
+    async def test_remove_contact(self):
+        contact = self.contact_test
+        self.session.query().filter().first.return_value = contact
+        result = await remove_contact(contact_id=self.contact_test.id, db=self.session, user=self.user)
+        self.assertEqual(result, contact)
+
+    async def test_remove_contact_not_found(self):
+        self.session.query().filter().first.return_value = None
+        result = await remove_contact(contact_id=self.contact_test.id, db=self.session, user=self.user)
+        self.assertIsNone(result)
+
+
 
 
 if __name__ == '__main__':
