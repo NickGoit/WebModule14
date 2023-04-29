@@ -1,9 +1,11 @@
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock, patch, AsyncMock
+from datetime import datetime
 
 import pytest
 
-from src.database.models import Contact
+from src.database.models import Contact, User
 from src.services.auth import auth_service
+
 
 @pytest.fixture()
 def token(client, user, session, monkeypatch):
@@ -19,3 +21,25 @@ def token(client, user, session, monkeypatch):
     )
     data = response.json()
     return data["access_token"]
+
+
+def test_create_contact(client, token, monkeypatch):
+    with patch.object(auth_service, 'r') as r_mock:
+        r_mock.get.return_value = None
+        monkeypatch.setattr('fastapi_limiter.FastAPILimiter.redis', AsyncMock())
+        monkeypatch.setattr('fastapi_limiter.FastAPILimiter.identifier', AsyncMock())
+        monkeypatch.setattr('fastapi_limiter.FastAPILimiter.http_callback', AsyncMock())
+        response = client.post("/api/contacts/",
+                               json={
+                                   "first_name": "Tom",
+                                   "last_name": "Soyer",
+                                   "email": "Tomas@example.com",
+                                   "phone": "+31462454652",
+                                   "date_of_birth": "2018-10-5"
+                               },
+                               headers={"Authorization": f"Bearer {token}"}
+                               )
+        assert response.status_code == 201, response.text
+        data = response.json()
+        assert data["first_name"] == "Tom"
+        assert "id" in data
