@@ -43,3 +43,26 @@ def test_create_contact(client, token, monkeypatch):
         data = response.json()
         assert data["first_name"] == "Tom"
         assert "id" in data
+
+
+def test_get_contact_by_name(client, token, monkeypatch):
+    with patch.object(auth_service, 'r') as r_mock:
+        r_mock.get.return_value = None
+        monkeypatch.setattr('fastapi_limiter.FastAPILimiter.redis', AsyncMock())
+        monkeypatch.setattr('fastapi_limiter.FastAPILimiter.identifier', AsyncMock())
+        monkeypatch.setattr('fastapi_limiter.FastAPILimiter.http_callback', AsyncMock())
+        response = client.get("/api/contacts/",
+                              headers={"Authorization": f"Bearer {token}"}
+                              )
+        assert response.status_code == 200, response.text
+
+
+def test_get_contact_by_id(client, token):
+    with patch.object(auth_service, 'r') as r_mock:
+        r_mock.get.return_value = None
+        response = client.get("/api/contacts/1",
+                              headers={"Authorization": f"Bearer {token}"}
+                              )
+        assert response.status_code == 200, response.text
+
+
