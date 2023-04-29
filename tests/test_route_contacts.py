@@ -77,3 +77,41 @@ def test_get_birthday(client, token):
         assert response.status_code == 200, response.text
 
 
+def test_update_contact(client, token):
+    with patch.object(auth_service, 'r') as r_mock:
+        r_mock.get.return_value = None
+        response = client.put("/api/contacts/1",
+                              json={
+                                  "first_name": "Abraham",
+                                  "last_name": "Lincoln",
+                                  "email": "Abraham@example.com",
+                                  "phone": "+864214669",
+                                  "date_of_birth": "2015-04-30"
+                              },
+                              headers={"Authorization": f"Bearer {token}"}
+                              )
+        assert response.status_code == 200, response.text
+        data = response.json()
+        assert data["first_name"] == "Abraham"
+
+
+def test_remove_contact(client, token):
+    with patch.object(auth_service, 'r') as r_mock:
+        r_mock.get.return_value = None
+        response = client.delete("/api/contacts/1",
+                                 headers={"Authorization": f"Bearer {token}"}
+                                 )
+        assert response.status_code == 204, response.text
+
+
+def test_repeat_remove_contact(client, token):
+    with patch.object(auth_service, 'r') as r_mock:
+        r_mock.get.return_value = None
+        response = client.delete("/api/contacts/1",
+                                 headers={"Authorization": f"Bearer {token}"}
+                                 )
+        assert response.status_code == 404, response.text
+        data = response.json()
+        assert data["detail"] == "Contact not found"
+
+

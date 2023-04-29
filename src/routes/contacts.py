@@ -149,7 +149,7 @@ The remove_contact function removes a contact from the database.
 :doc-author: Trelent
 """
     contact = await repository_contacts.remove_contact(contact_id, db, current_user)
-    if contact_id is None:
+    if contact is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Contact not found")
     return contact
 
