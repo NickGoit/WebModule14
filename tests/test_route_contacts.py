@@ -35,7 +35,7 @@ def test_create_contact(client, token, monkeypatch):
                                    "last_name": "Soyer",
                                    "email": "Tomas@example.com",
                                    "phone": "+31462454652",
-                                   "date_of_birth": "2018-10-5"
+                                   "date_of_birth": "2018-04-30"
                                },
                                headers={"Authorization": f"Bearer {token}"}
                                )
@@ -61,6 +61,17 @@ def test_get_contact_by_id(client, token):
     with patch.object(auth_service, 'r') as r_mock:
         r_mock.get.return_value = None
         response = client.get("/api/contacts/1",
+                              headers={"Authorization": f"Bearer {token}"}
+                              )
+        assert response.status_code == 200, response.text
+        data = response.json()
+        assert data["first_name"] == "Tom"
+
+
+def test_get_birthday(client, token):
+    with patch.object(auth_service, 'r') as r_mock:
+        r_mock.get.return_value = None
+        response = client.get("/api/contacts/birthday",
                               headers={"Authorization": f"Bearer {token}"}
                               )
         assert response.status_code == 200, response.text
